@@ -14,31 +14,31 @@ pipeline {
 
         stage('Setup') {
             steps {
-                sh 'npm install'
+                bat 'npm install'
             }
         }
 
         stage('Build') {
             steps {
-                sh 'npm run build'
+                bat 'npm run build'
             }
         }
 
         stage('Docker Build') {
             steps {
-                sh 'docker build -t $IMAGE_NAME .'
+                bat 'docker build -t $IMAGE_NAME .'
             }
         }
 
         stage('Run Docker') {
             steps {
-                sh 'docker run -d -p 3002:80 --name ${IMAGE_NAME}-container $IMAGE_NAME'
+                bat 'docker run -d -p 3002:80 --name ${IMAGE_NAME}-container $IMAGE_NAME'
             }
         }
 
         stage('Smoke Test') {
             steps {
-                sh 'curl -f http://localhost:3002 || exit 1'
+                bat 'curl -f http://localhost:3002 || exit 1'
             }
         }
 
@@ -51,8 +51,8 @@ pipeline {
 
     post {
         always {
-            sh 'docker ps -q | xargs -r docker stop'
-            sh 'docker ps -aq | xargs -r docker rm'
+            bat 'docker ps -q | xargs -r docker stop'
+            bat 'docker ps -aq | xargs -r docker rm'
         }
     }
 }
